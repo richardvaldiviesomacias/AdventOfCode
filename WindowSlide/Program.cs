@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace WindowSlide
@@ -12,7 +13,7 @@ namespace WindowSlide
             Console.WriteLine(result);
         }
 
-        private static int CalculateIncrease(string[] lines)
+        private static int CalculateIncrease(IReadOnlyList<string> lines)
         {
             
             var topIndex = 0;
@@ -20,7 +21,7 @@ namespace WindowSlide
             var count = 0;
             int[] partialArray = { int.Parse(lines[topIndex]), int.Parse(lines[1]), int.Parse(lines[lowIndex])};
             var previousMeasure = SumElementsFrom(partialArray);
-            while (lowIndex < lines.Length - 1)
+            while (lowIndex < lines.Count - 1)
             {
                 topIndex = topIndex + 1;
                 lowIndex = topIndex + 2; 

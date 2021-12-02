@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace PilotExercise
@@ -11,7 +12,7 @@ namespace PilotExercise
             Console.WriteLine(Position(lines));
         }
 
-        private static int Position(string[] lines)
+        private static int Position(IEnumerable<string> lines)
         {
             var forward = 0;
             var depth = 0;
