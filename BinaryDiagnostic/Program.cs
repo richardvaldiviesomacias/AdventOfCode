@@ -11,8 +11,8 @@ namespace BinaryDiagnostic
 
         private static void Main()
         {
-            var lines = File.ReadAllLines(@"input2.txt");
-            //Console.WriteLine(Diagnostic(lines));
+            var lines = File.ReadAllLines(@"input.txt");
+            Console.WriteLine(Diagnostic(lines));
             Console.WriteLine(DiagnosticOxygen(lines.ToList()));
             Console.WriteLine(DiagnosticCO2(lines.ToList()));
             Console.WriteLine(DiagnosticOxygen(lines.ToList()) * DiagnosticCO2(lines.ToList()));
