@@ -11,80 +11,42 @@ namespace BinaryDiagnostic
 
         private static void Main()
         {
-            var lines = File.ReadAllLines(@"input.txt");
+            var lines = File.ReadAllLines(@"input2.txt");
             //Console.WriteLine(Diagnostic(lines));
-            Console.WriteLine( DiagnosticOxygen(lines.ToList()));
+            Console.WriteLine(DiagnosticOxygen(lines.ToList()));
+            Console.WriteLine(DiagnosticCO2(lines.ToList()));
+            Console.WriteLine(DiagnosticOxygen(lines.ToList()) * DiagnosticCO2(lines.ToList()));
         }
 
-        private static List<string> Something(List<string> lines, List<string> listOfOnes, List<string> listOfZeros)
-        {
-            if ((lines.Count > listOfZeros.Count) || (listOfOnes.Count == listOfZeros.Count))
-            {
-                GettingLines(lines, 1, listOfZeros, listOfOnes);
-                return listOfOnes;
-            }
-            GettingLines(lines, 1, listOfZeros, listOfOnes);
-            return listOfZeros;
-        }
-        
         private static int DiagnosticOxygen(List<string> lines)
         {
-            var listOfZeros = new List<string>();
-            var listOfOnes = new List<string>();
-            if (listOfOnes.Count > listOfZeros.Count || listOfOnes.Count == listOfZeros.Count)
+            for (int j = 0; j < lines[0].Length; j++)
             {
-                GettingLines(lines, 0, listOfZeros, listOfOnes);
-            }
-            
-            var listOfZeros1 = new List<string>();
-            var listOfOnes1 = new List<string>();
-            if ((listOfOnes.Count > listOfZeros.Count) || (listOfOnes.Count == listOfZeros.Count))
-            {
-                GettingLines(listOfOnes, 1, listOfZeros1, listOfOnes1);
-            }
-            else
-            {
-                GettingLines(listOfZeros, 1, listOfZeros1, listOfOnes1);
-            }
-            
-            var listOfZeros2 = new List<string>();
-            var listOfOnes2 = new List<string>();
-            if ((listOfOnes1.Count > listOfZeros1.Count) || (listOfOnes1.Count == listOfZeros1.Count))
-            {
-                GettingLines(listOfOnes1, 2, listOfZeros2, listOfOnes2);
-            }
-            else
-            {
-                GettingLines(listOfZeros1, 2, listOfZeros2, listOfOnes2);
-            }
-            
-            var listOfZeros3 = new List<string>();
-            var listOfOnes3 = new List<string>();
-            if ((listOfOnes2.Count > listOfZeros2.Count) || (listOfOnes2.Count == listOfZeros2.Count))
-            {
-                GettingLines(listOfOnes2, 3, listOfZeros3, listOfOnes3);
-            }
-            else
-            {
-                GettingLines(listOfZeros2, 3, listOfZeros3, listOfOnes3);
-            }
-          
-            
-            var listOfZeros4 = new List<string>();
-            var listOfOnes4= new List<string>();
-            if ((listOfOnes3.Count > listOfZeros3.Count) || (listOfOnes2.Count == listOfZeros2.Count))
-            {
-                GettingLines(listOfOnes3, 4, listOfZeros4, listOfOnes4);
-            }
-            else
-            {
-                GettingLines(listOfZeros3, 4, listOfZeros4, listOfOnes4);
+                var listOfZeros = new List<string>();
+                var listOfOnes = new List<string>();
+                lines = (List<string>)GettingLines(lines, j, listOfZeros, listOfOnes, true);
+                if (lines.Count == 1) break;
             }
 
-            return Convert(listOfOnes4[0]);
+            return Convert(lines[0]);
         }
 
-        private static void GettingLines(IReadOnlyList<string> lines,  int j, List<string>? listOfZeros, List<string>? listOfOnes)
+        private static int DiagnosticCO2(List<string> lines)
+        {
+            for (int j = 0; j < lines[0].Length; j++)
+            {
+                var listOfZeros = new List<string>();
+                var listOfOnes = new List<string>();
+                lines = (List<string>)GettingLines(lines, j, listOfZeros, listOfOnes, false);
+                if (lines.Count == 1) break;
+            }
+
+            return Convert(lines[0]);
+        }
+
+        private static ICollection<string> GettingLines(IEnumerable<string> lines, int j,
+            ICollection<string> listOfZeros,
+            ICollection<string> listOfOnes, bool higher)
         {
             foreach (var t in lines)
             {
@@ -98,6 +60,23 @@ namespace BinaryDiagnostic
                     listOfOnes.Add(t);
                 }
             }
+
+            if (higher)
+            {
+                if (listOfOnes.Count > listOfZeros.Count || listOfOnes.Count == listOfZeros.Count)
+                {
+                    return listOfOnes;
+                }
+
+                return listOfZeros;
+            }
+
+            if (listOfOnes.Count > listOfZeros.Count || listOfOnes.Count == listOfZeros.Count)
+            {
+                return listOfZeros;
+            }
+
+            return listOfOnes;
         }
 
         private static int Diagnostic(IReadOnlyList<string> lines)
@@ -110,7 +89,7 @@ namespace BinaryDiagnostic
             {
                 foreach (var t in lines)
                 {
-                    var parseNumber = int.Parse(t.Substring(j,1));
+                    var parseNumber = int.Parse(t.Substring(j, 1));
                     if (parseNumber == 0)
                     {
                         countZeros++;
@@ -135,14 +114,17 @@ namespace BinaryDiagnostic
                 countOnes = 0;
                 countZeros = 0;
             }
+
             return Convert(numberGamma) * Convert(numberEpsilon);
         }
-        
-    private static int Convert(string str1) {
+
+        private static int Convert(string str1)
+        {
             if (str1 == "")
                 throw new Exception("Invalid input");
             var res = 0;
-            for (var i = 0; i < str1.Length; i++) {
+            for (var i = 0; i < str1.Length; i++)
+            {
                 try
                 {
                     var val = int.Parse(str1[i].ToString());
@@ -154,10 +136,13 @@ namespace BinaryDiagnostic
                         case > 1:
                             throw new Exception("Invalid!");
                     }
-                } catch {
+                }
+                catch
+                {
                     throw new Exception("Invalid!");
                 }
             }
+
             return res;
         }
     }
